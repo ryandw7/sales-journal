@@ -4,7 +4,7 @@
   "description": "A journal for Salesmen who deal with a large quantity of clients, designed for optimal organization.",
   "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
+    "start": "webpack serve dev",
     "build": "webpack --mode production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
