@@ -2,10 +2,10 @@ const path = require("path");
 
 console.log(path.resolve(__dirname, 'dist'));
 module.exports = {
-    entry: './src/index.js',
+    
     output: {
-        path: path.resolve(__dirname, 'static'),
-        filename: 'bundle.js'
+        path: path.join(__dirname, 'dist'),
+        filename: 'index.bundle.js'
     },
     module: {
         rules: [
@@ -22,11 +22,6 @@ module.exports = {
         extensions: ['.js', '.jsx'],
     },
     devServer: {
-
-        static: {
-            directory: path.join(__dirname, 'public'),
-          },
-          compress: true,
-          port: 9000,
-        },
+        port: 9000,
+    },
 }
