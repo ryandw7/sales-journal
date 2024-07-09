@@ -6,8 +6,9 @@ server.use(express.static('public'));
 server.use(cors())
 
 
+server.use('/api')
 
-server.get("/api", (req, res, next)=>{
+server.get("/", (req, res, next)=>{
     const resObj = {
         user: "yo momma"
     }
