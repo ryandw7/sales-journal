@@ -34,4 +34,3 @@ const dbRegister = async (firstName, lastName, username, password) => {
 
 }
 
-dbRegister('Ryan', 'Wilson', 'Ryandw7wdawd', 'pass7word');
