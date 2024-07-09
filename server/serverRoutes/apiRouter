@@ -9,8 +9,7 @@ const errorMiddleware = (err, req, res) => {
 
 }
 apiRouter.post("/register", async (req, res, next) => {
-    const { firstName, lastName, userName, password } = req.body;
-    console.log(req.body)
+    const { firstName, lastName, userName, password } = await req.body;
        await registerUser(firstName, lastName, userName, password);
        res.status(201).send(req.body)
 });

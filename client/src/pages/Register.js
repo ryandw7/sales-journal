@@ -13,17 +13,21 @@ export default function Register() {
         console.log(JSON.stringify(reqBody))
         try {
             console.log('request is being submitted')
-            const res = await fetch('http://localhost:5050/api/register', {
+            const res = await fetch('https://super-duper-yodel-vx79vqqgqrvcp997-5050.app.github.dev/api/register', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Make sure to set Content-Type
+                },
                 body: JSON.stringify({
-                    "firstName": firstName,
-                    "lastName": lastName,
-                    "userName": userName,
-                    "password": password
+                firstName: `${firstName}`,
+                    lastName: `${lastName}`,
+                    userName: `${userName}`,
+                    password: `${password}`
                 })
             });
-            console.log(res);
-            return res;
+            const data = await res.json()
+            console.log(data);
+            return data;
 
         } catch (error) {
             console.log(error)
@@ -44,6 +48,7 @@ export default function Register() {
     }
     const handleFormSubmit = (e) => {
         e.preventDefault();
+        if(formData.password === formData.confirmPassword){
         submitUser(formData);
         setFormData((prev) => {
             return {
@@ -55,6 +60,16 @@ export default function Register() {
                 confirmPassword: ''
             }
         })
+    }else if(formData.password !== formData.confirmPassword){
+        console.log('Passwords do not match');
+        setFormData((prev)=>{
+            return {
+                ...prev,
+                password: '',
+                confirmPassword: ''
+            }
+        })
+    }
     }
 
 
