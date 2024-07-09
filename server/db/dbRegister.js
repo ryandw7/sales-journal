@@ -2,9 +2,9 @@ const client = require('./pgClient.js');
 
 const dbRegister = async (firstName, lastName, username, password) => {
     const unQuery = await client.query(`SELECT * FROM users WHERE un = '${username}';`);
-    if(unQuery.rows.length > 0){
+   /* if(unQuery.rows.length > 0){
         throw new Error('That username is already taken.')
-    }
+    } */
     const generateId = async () => {
         let uniqueId = false;
         while (uniqueId === false) {
