@@ -34,3 +34,4 @@ const dbRegister = async (firstName, lastName, username, password) => {
 
 }
 
+module.exports = dbRegister;

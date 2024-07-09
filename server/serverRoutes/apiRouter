@@ -1,0 +1,14 @@
+const express = require('express');
+const apiRouter = express.Router();
+const registerUser = require('../db/dbRegister.js')
+apiRouter.get("/", (req, res, next)=>{
+    ("echoe")
+});
+
+apiRouter.post("/register", async (req, res, next) => {
+    const {firstName, lastName, userName, password } = req.body;
+       await registerUser(firstName, lastName, userName, password);
+       res.send('User registered successfully')
+});
+
+module.exports = {apiRouter: apiRouter};
