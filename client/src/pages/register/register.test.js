@@ -1,6 +1,6 @@
 import Register from "./Register";
 import React from "react";
-import { screen, render } from '@testing-library/react';
+import { screen, render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 test('Register renders properly', ()=>{
     render(<Register />);
@@ -13,4 +13,10 @@ test('Register renders all input fields', ()=>{
     expect(screen.getByPlaceholderText("Username")).toBeTruthy();
     expect(screen.getByPlaceholderText("Confirm Password")).toBeTruthy();
     expect(document.querySelector("input[type='submit']")).toBeInTheDocument()
+});
+
+test('Register rejects upon missentered confirm password', ()=>{
+    render(<Register />);
+    fireEvent.change(screen.getByPlaceholderText('Username'), {target: {value: 'a'}});
+    expect(screen.getByPlaceholderText(/username/i).target.value).toBe('a');
 })

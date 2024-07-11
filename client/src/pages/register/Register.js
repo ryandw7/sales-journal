@@ -8,6 +8,7 @@ export default function Register() {
         password: '',
         confirmPassword: ''
     });
+
     const submitUser = async (reqBody) => {
         const { firstName, lastName, userName, password } = reqBody;
         console.log(JSON.stringify(reqBody))
@@ -77,12 +78,24 @@ export default function Register() {
         <div>
             <h1>Register</h1>
             <form onSubmit={handleFormSubmit}>
+                 <label for="firstName">First Name:
                 <input type="text" placeholder="First Name" name="firstName" value={formData.firstName} onChange={handleInputChange} />
+                </label>
+                <label for="lastName">Last Name:
                 <input type="text" placeholder="Last Name" name="lastName" value={formData.lastName} onChange={handleInputChange} />
+                </label>
+                <label for="userName">Username: 
                 <input type="text" placeholder="Username" name="userName" value={formData.userName} onChange={handleInputChange} />
+                </label>
+                <label for="password">Password:
                 <input type="password" placeholder="Password" name="password" value={formData.password} onChange={handleInputChange} />
+                </label>
+                <label for="confirmPassword">
                 <input type="password" placeholder="Confirm Password" name="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} />
-                <input type="submit"></input>
+                </label>
+                <label for="submit">
+                <input type="submit" name="submit"></input>
+                </label>
             </form>
         </div>
     )
