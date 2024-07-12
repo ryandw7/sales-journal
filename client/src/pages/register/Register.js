@@ -9,10 +9,10 @@ export default function Register() {
         confirmPassword: ''
     });
 
-    const [errorText, setErrorText] = useState(false);
+    const [errorText, setErrorText] = useState('');
     const submitUser = async (reqBody) => {
         const { firstName, lastName, userName, password } = reqBody;
-        console.log(JSON.stringify(reqBody))
+
         try {
             console.log('request is being submitted')
             const res = await fetch('https://super-duper-yodel-vx79vqqgqrvcp997-5050.app.github.dev/api/register', {
@@ -21,14 +21,14 @@ export default function Register() {
                     'Content-Type': 'application/json', // Make sure to set Content-Type
                 },
                 body: JSON.stringify({
-                    firstName: `${firstName}`,
-                    lastName: `${lastName}`,
-                    userName: `${userName}`,
-                    password: `${password}`
+                    firstName,
+                    lastName,
+                    userName,
+                    password
                 })
             });
-            const data = await res.json()
-            console.log(data);
+            const data = await res.json();
+
             return data;
 
         } catch (error) {
@@ -38,30 +38,26 @@ export default function Register() {
     }
 
     const handleInputChange = (e) => {
-        const type = e.target.name
-        const value = e.target.value;
-        if (type === 'password' || 'confirmPassword') {
-            setErrorText('')
-        }
-        setFormData((prev) => {
-            const obj = {
-                ...prev,
-                [type]: value
-            }
-            return obj;
-        })
-    }
+        const { name, value } = e.target;
+        setErrorText('');
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
     const handleFormSubmit = (e) => {
-        for (const [key, value] of Object.entries(formData)) {
+        e.preventDefault();
+
+        for (const value of Object.values(formData)) {
             if (value === '') {
-                
                 setErrorText('No values should be empty!');
+                return;
             }
-            console.log(`${key}: ${value}`);
         }
 
-        e.preventDefault();
-         if (formData.password !== formData.confirmPassword) {
+
+        if (formData.password !== formData.confirmPassword) {
             setErrorText('Passwords do not match!');
             setFormData((prev) => {
                 return {
@@ -72,6 +68,7 @@ export default function Register() {
             })
 
         };
+
         if (errorText === '') {
             submitUser(formData).then();
             setFormData((prev) => {
@@ -111,7 +108,7 @@ export default function Register() {
                     <input type="submit" name="submit" role="submit"></input>
                 </label>
                 {errorText && <div role="register-error">ERROR: {errorText}</div>}
-            
+
             </form>
         </div>
     )

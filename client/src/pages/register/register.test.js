@@ -4,54 +4,44 @@ import { screen, render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { changeInputValue } from "../../../testUtils";
+
+beforeEach(() => {
+    render(<Register />);
+});
+
 test('Register renders properly', () => {
-    render(<Register />);
     expect(screen.getAllByText("Register")).toBeTruthy();
-})
-test('Register renders all input fields', () => {
-    render(<Register />);
-    expect(screen.getByPlaceholderText("First Name")).toBeTruthy();
-    expect(screen.getByPlaceholderText("Last Name")).toBeTruthy();
-    expect(screen.getByPlaceholderText("Username")).toBeTruthy();
-    expect(screen.getByPlaceholderText("Confirm Password")).toBeTruthy();
-    expect(document.querySelector("input[type='submit']")).toBeInTheDocument()
 });
 
-test('Register inputs update corresponding', () => {
-    render(<Register />);
-    fireEvent.change(screen.getByLabelText(/First Name/i), { target: { value: 'a' } });
-    fireEvent.change(screen.getByLabelText(/Last Name/i), { target: { value: 'a' } });
-    fireEvent.change(screen.getByLabelText(/Username/i), { target: { value: 'a' } });
-    fireEvent.change(screen.getByLabelText(/Enter Password/i), { target: { value: 'a' } });
-    fireEvent.change(screen.getByLabelText(/Confirm Password/i), { target: { value: 'a' } });
-    expect(screen.getByLabelText(/First Name/i).value).toBe('a');
-    expect(screen.getByLabelText(/Last Name/i).value).toBe('a');
-    expect(screen.getByLabelText(/Username/i).value).toBe('a');
-    expect(screen.getByLabelText(/Enter Password/i).value).toBe('a');
-    expect(screen.getByLabelText(/Confirm Password/i).value).toBe('a');
-})
-
-test('Register clears password value if passwords do not match', async () => {
-    render(<Register />);
-    changeInputValue(/Enter Password/i, 'password');
-    changeInputValue(/Confirm Password/i, 'password!');
-    await userEvent.click(screen.getByRole("submit"));
-    expect(screen.getByLabelText(/Enter Password/i).value).toBe('');
-    expect(screen.getByLabelText(/Confirm Password/i).value).toBe('');
+test('Register inputs render and update correspondingly', () => {
+    changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'drowssap', /Confirm Password/i, 'drowssap');
+    
+    expect(screen.getByLabelText(/First Name/i).value).toBe('John');
+    expect(screen.getByLabelText(/Last Name/i).value).toBe('Doe');
+    expect(screen.getByLabelText(/Username/i).value).toBe('John.Doe23');
+    expect(screen.getByLabelText(/Enter Password/i).value).toBe('drowssap');
+    expect(screen.getByLabelText(/Confirm Password/i).value).toBe('drowssap');
 });
-test("Register sends error if passwords do not match", async ()=>{
-    render(<Register />);
-    changeInputValue(/Enter Password/i, 'password');
-    changeInputValue(/Confirm Password/i, 'password!');
-    await userEvent.click(screen.getByRole("submit"));
+
+test('Register handles password mismatch', async () => {
+    changeInputValue(/Enter Password/i, 'password', /Confirm Password/i, 'password!');
+    await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
+
+    const passwordInput = screen.getByLabelText(/Enter Password/i);
+    const confirmPasswordInput = screen.getByLabelText(/Confirm Password/i);
+
+    expect(passwordInput.value).toBe('');
+    expect(confirmPasswordInput.value).toBe('');
+
     const err = screen.getByRole("register-error");
     expect(err).toBeInTheDocument();
     expect(err.textContent).toBe('ERROR: Passwords do not match!');
-})
-test('Register sends error if field is blank', async ()=>{
-render(<Register />);
-await userEvent.click(screen.getByRole("submit"));
-const err = screen.getByRole("register-error");
-expect(err).toBeInTheDocument();
-expect(err.textContent).toBe('ERROR: No values should be empty!');
-})
+});
+
+test('Register handles empty fields', async () => {
+    await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
+
+    const err = screen.getByRole("register-error");
+    expect(err).toBeInTheDocument();
+    expect(err.textContent).toBe('ERROR: No values should be empty!');
+});
