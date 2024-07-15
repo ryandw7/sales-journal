@@ -4,10 +4,25 @@ import { screen, render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { changeInputValue } from "../../../testUtils";
-
+import { BrowserRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { server } from '../../mocks/node'
 beforeEach(() => {
-    render(<Register />);
+    render(<BrowserRouter><Register /></BrowserRouter>);
 });
+
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: jest.fn()
+}));
+
+test('Register submits new user upon successful entry', () => {
+    server.listen()
+    changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'drowssap', /Confirm Password/i, 'drowssap');
+    userEvent.click(screen.getByRole("submit", { name: /submit/i }));
+    expect(useNavigate).toHaveBeenCalled();
+})
+
 
 test('Register renders properly', () => {
     expect(screen.getAllByText("Register")).toBeTruthy();
@@ -15,7 +30,6 @@ test('Register renders properly', () => {
 
 test('Register inputs render and update correspondingly', () => {
     changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'drowssap', /Confirm Password/i, 'drowssap');
-    
     expect(screen.getByLabelText(/First Name/i).value).toBe('John');
     expect(screen.getByLabelText(/Last Name/i).value).toBe('Doe');
     expect(screen.getByLabelText(/Username/i).value).toBe('John.Doe23');
@@ -24,7 +38,7 @@ test('Register inputs render and update correspondingly', () => {
 });
 
 test('Register handles password mismatch', async () => {
-    changeInputValue(/Enter Password/i, 'password', /Confirm Password/i, 'password!');
+    changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'password', /Confirm Password/i, 'password!');
     await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
 
     const passwordInput = screen.getByLabelText(/Enter Password/i);
@@ -45,3 +59,4 @@ test('Register handles empty fields', async () => {
     expect(err).toBeInTheDocument();
     expect(err.textContent).toBe('ERROR: No values should be empty!');
 });
+

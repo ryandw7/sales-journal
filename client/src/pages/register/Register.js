@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 export default function Register() {
+   
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -10,12 +11,22 @@ export default function Register() {
     });
 
     const [errorText, setErrorText] = useState('');
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setErrorText('');
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
     const submitUser = async (reqBody) => {
         const { firstName, lastName, userName, password } = reqBody;
 
         try {
             console.log('request is being submitted')
-            const res = await fetch('https://super-duper-yodel-vx79vqqgqrvcp997-5050.app.github.dev/api/register', {
+            const res = await fetch('https://localhost5050/api/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Make sure to set Content-Type
@@ -27,8 +38,8 @@ export default function Register() {
                     password
                 })
             });
-            const data = await res.json();
 
+            const data = await res.json();
             return data;
 
         } catch (error) {
@@ -36,16 +47,6 @@ export default function Register() {
             return error;
         }
     }
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setErrorText('');
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
     const handleFormSubmit = (e) => {
         e.preventDefault();
 
@@ -70,7 +71,7 @@ export default function Register() {
         };
 
         if (errorText === '') {
-            submitUser(formData).then();
+            submitUser(formData);
             setFormData((prev) => {
                 return {
                     ...prev,
@@ -80,7 +81,8 @@ export default function Register() {
                     password: '',
                     confirmPassword: ''
                 }
-            })
+            });
+           return useNavigate({ to: '/login' })
         }
     }
 
