@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 import { changeInputValue } from "../../../testUtils";
 import { BrowserRouter } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { server } from '../../mocks/node'
+
 beforeEach(() => {
     render(<BrowserRouter><Register /></BrowserRouter>);
 });
@@ -17,7 +17,6 @@ jest.mock('react-router-dom', () => ({
 }));
 
 test('Register submits new user upon successful entry', () => {
-    server.listen()
     changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'drowssap', /Confirm Password/i, 'drowssap');
     userEvent.click(screen.getByRole("submit", { name: /submit/i }));
     expect(useNavigate).toHaveBeenCalled();
