@@ -11,7 +11,6 @@ export const changeInputValue = (...args) => {
     for (let i = 0; i < args.length; i += 2) {
         const labelText = args[i];
         const value = args[i + 1];
-        console.log(labelText, value);
         fireEvent.change(screen.getByLabelText(labelText), { target: { value } });
     }
 };

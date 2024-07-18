@@ -16,9 +16,23 @@ jest.mock('react-router-dom', () => ({
     useNavigate: jest.fn()
 }));
 
-test('Register submits new user upon successful entry', () => {
+test('Mock server', async () => {
+    try {
+      const res = await fetch('/api/user');
+      const data = await res.json();
+    
+      expect(data).toBe({
+        id: 'c7b3d8e0-5e0b-4b0f-8b3a-3b9f4b3d3b3d',
+        firstName: 'John',
+        lastName: 'Maverick',
+      })
+    } catch (err) {
+        return err;
+    }
+})
+test('Register submits new user upon successful entry', async () => {
     changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'drowssap', /Confirm Password/i, 'drowssap');
-    userEvent.click(screen.getByRole("submit", { name: /submit/i }));
+    await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
     expect(useNavigate).toHaveBeenCalled();
 })
 
