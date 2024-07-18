@@ -18,14 +18,10 @@ jest.mock('react-router-dom', () => ({
 
 test('Mock server', async () => {
     try {
-      const res = await fetch('/api/user');
+      const res = await fetch('localhost:5050/api');
       const data = await res.json();
     
-      expect(data).toBe({
-        id: 'c7b3d8e0-5e0b-4b0f-8b3a-3b9f4b3d3b3d',
-        firstName: 'John',
-        lastName: 'Maverick',
-      })
+      expect(data).toBe('Server request successful!')
     } catch (err) {
         return err;
     }
