@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 export default function Register() {
-   
+
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -82,7 +82,7 @@ export default function Register() {
                     confirmPassword: ''
                 }
             });
-           return useNavigate({ to: '/login' })
+            useNavigate({ to: '/login' })
         }
     }
 
