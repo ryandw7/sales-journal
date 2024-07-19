@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { registerUser } from './registerSlice';
+import { useDispatch } from 'react-redux';
 export default function Register() {
-
+   const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -21,32 +23,6 @@ export default function Register() {
         }));
     };
 
-    const submitUser = async (reqBody) => {
-        const { firstName, lastName, userName, password } = reqBody;
-
-        try {
-            console.log('request is being submitted')
-            const res = await fetch('https://localhost5050/api/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Make sure to set Content-Type
-                },
-                body: JSON.stringify({
-                    firstName,
-                    lastName,
-                    userName,
-                    password
-                })
-            });
-
-            const data = await res.json();
-            return data;
-
-        } catch (error) {
-            console.log(error)
-            return error;
-        }
-    }
     const handleFormSubmit = (e) => {
         e.preventDefault();
 
@@ -71,7 +47,7 @@ export default function Register() {
         };
 
         if (errorText === '') {
-            submitUser(formData);
+           dispatch(registerUser(formData));
             setFormData((prev) => {
                 return {
                     ...prev,
@@ -91,22 +67,22 @@ export default function Register() {
         <div>
             <h1>Register</h1>
             <form onSubmit={handleFormSubmit}>
-                <label for="firstName">First Name:
+                <label htmlFor="firstName">First Name:
                     <input type="text" placeholder="First Name" name="firstName" id="firstName" value={formData.firstName} onChange={handleInputChange} />
                 </label>
-                <label for="lastName">Last Name:
+                <label htmlFor="lastName">Last Name:
                     <input type="text" placeholder="Last Name" name="lastName" id="lastName" value={formData.lastName} onChange={handleInputChange} />
                 </label>
-                <label for="userName">Username:
+                <label htmlFor="userName">Username:
                     <input type="text" placeholder="Username" name="userName" id="userName" value={formData.userName} onChange={handleInputChange} />
                 </label>
-                <label for="password">Enter Password:
+                <label htmlFor="password">Enter Password:
                     <input type="password" placeholder="at least 8 characters" name="password" id="password" value={formData.password} onChange={handleInputChange} />
                 </label>
-                <label for="confirmPassword">Confirm Password:
+                <label htmlFor="confirmPassword">Confirm Password:
                     <input type="password" placeholder="Confirm Password" name="confirmPassword" id="confirmPassword" value={formData.confirmPassword} onChange={handleInputChange} />
                 </label>
-                <label for="submit">
+                <label htmlFor="submit">
                     <input type="submit" name="submit" role="submit"></input>
                 </label>
                 {errorText && <div role="register-error">ERROR: {errorText}</div>}

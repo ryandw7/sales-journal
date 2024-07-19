@@ -4,9 +4,9 @@ import {
     BrowserRouter,
     Routes
   } from "react-router-dom";
-  import Login from './pages/login/Login.js';
-  import Home from "./pages/Home";
-  import Register from "./pages/register/Register.js";
+  import Login from '../pages/login/Login.js';
+  import Home from "../pages/Home.js";
+  import Register from "../pages/register/Register.js";
 export default function App (){
     return (
         <BrowserRouter>
