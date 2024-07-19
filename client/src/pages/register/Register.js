@@ -4,6 +4,7 @@ import { registerUser } from './registerSlice';
 import { useDispatch } from 'react-redux';
 export default function Register() {
    const dispatch = useDispatch();
+   const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -47,6 +48,7 @@ export default function Register() {
         };
 
         if (errorText === '') {
+            console.log('submitting')
            dispatch(registerUser(formData));
             setFormData((prev) => {
                 return {
@@ -58,7 +60,7 @@ export default function Register() {
                     confirmPassword: ''
                 }
             });
-            useNavigate({ to: '/login' })
+            navigate({ to: '/login' })
         }
     }
 
