@@ -2,7 +2,7 @@ const path = require("path");
 
 console.log(path.resolve(__dirname, 'dist'));
 module.exports = {
-    
+
     output: {
         path: path.join(__dirname, 'dist'),
         filename: 'index.bundle.js'
@@ -16,7 +16,11 @@ module.exports = {
                     loader: 'babel-loader',
                 },
             },
-        ],
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
+        ]
     },
     resolve: {
         extensions: ['.js', '.jsx'],

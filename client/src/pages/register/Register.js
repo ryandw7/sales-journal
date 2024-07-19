@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { registerUser } from './registerSlice';
-import { useDispatch } from 'react-redux';
+import { registerUser, selectRegisterStatus } from './registerSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
 export default function Register() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const status = useSelector(selectRegisterStatus);
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -15,6 +17,19 @@ export default function Register() {
 
     const [errorText, setErrorText] = useState('');
 
+    const loading = <div className="loader"></div>;
+    const fulfilled = () => navigate('/login');
+    let rejected;
+    const loader = () => {
+        switch (status){
+            case 'pending' : return loading;
+           
+            case 'fulfilled' : return fulfilled;
+            
+            case 'rejected' : return rejected;
+        }
+    };
+   
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setErrorText('');
@@ -102,6 +117,7 @@ export default function Register() {
                 <label htmlFor="submit">
                     <input type="submit" name="submit" role="submit"></input>
                 </label>
+                {loader()}
                 {errorText && <div role="register-error">ERROR: {errorText}</div>}
 
             </form>
