@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { registerUser } from './registerSlice';
 import { useDispatch } from 'react-redux';
 export default function Register() {
-   const dispatch = useDispatch();
-   const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -24,7 +24,7 @@ export default function Register() {
         }));
     };
 
-    const handleFormSubmit = (e) => {
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
 
         for (const value of Object.values(formData)) {
@@ -48,8 +48,19 @@ export default function Register() {
         };
 
         if (errorText === '') {
-            console.log('submitting')
-           dispatch(registerUser(formData));
+
+            try {
+                const res = await dispatch(registerUser(formData))
+                if (!res.ok) {
+                    throw new Error('There was an error connection to the server :/ Try again in a little bit.');
+                }
+
+                navigate({ to: '/login' });
+            } catch (err) {
+                setErrorText(err.message)
+                console.log(err);
+                return err;
+            };
             setFormData((prev) => {
                 return {
                     ...prev,
@@ -60,7 +71,11 @@ export default function Register() {
                     confirmPassword: ''
                 }
             });
-            navigate({ to: '/login' })
+
+
+
+
+
         }
     }
 
