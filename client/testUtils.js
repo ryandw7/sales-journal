@@ -22,6 +22,7 @@ export function renderWithProviders(ui, extendedRenderOptions = {}) {
         ...render(ui, { wrapper: Wrapper, ...renderOptions })
     }
 }
+
 export const changeInputValue = (...args) => {
     // Ensure that args is an array of arrays where each sub-array is a pair [labelText, value]
     if (args.length % 2 !== 0) {

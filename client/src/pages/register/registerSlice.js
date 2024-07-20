@@ -18,14 +18,12 @@ export const registerUser = createAsyncThunk(
                     password
                 })
             });
-            if(!res.ok){
-              return Error('missing body info')
-            }
+            
             const data = await res.json();
             return data;
-        
+
         } catch (error) {
-            throw new Error(error.message);
+            throw new Error('Missing body info');
         }
     }
 )
@@ -40,7 +38,7 @@ const registerSlice = createSlice({
             .addCase(registerUser.rejected, (state, action) => {
                 state.registerStatus = 'rejected';
             })
-            .addCase(registerUser.pending, (state)=>{
+            .addCase(registerUser.pending, (state) => {
                 state.registerStatus = 'pending';
             })
             .addCase(registerUser.fulfilled, (state, action) => {

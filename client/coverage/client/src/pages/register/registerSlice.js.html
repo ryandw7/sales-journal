@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.75% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/16</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/15</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -114,8 +114,7 @@
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
 <a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L52'></a><a href='#L52'>52</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -141,7 +140,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -157,16 +155,16 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSlice, createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
 &nbsp;
 export const registerUser = createAsyncThunk(
@@ -175,7 +173,7 @@ export const registerUser = createAsyncThunk(
         const { firstName, lastName, userName, password } = reqBody;
 &nbsp;
         try {
-            const res = await fetch('https://localhost:4000/api/register', {
+            const res = await fetch('https://cautious-orbit-xjq7wvv9q55hvvrj-4000.app.github.dev/api/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Make sure to set Content-Type
@@ -192,8 +190,7 @@ export const registerUser = createAsyncThunk(
             return data;
 &nbsp;
         } catch (error) {
-            const err = new Error('missing body info');
-            throw err;
+            throw new Error('Missing body info');
         }
     }
 )
@@ -208,7 +205,7 @@ const registerSlice = createSlice({
             .addCase(registerUser.rejected, (state, action) =&gt; {
                 state.registerStatus = 'rejected';
             })
-            .addCase(registerUser.pending, (state)=&gt;{
+            .addCase(registerUser.pending, (state) =&gt; {
                 state.registerStatus = 'pending';
             })
             .addCase(registerUser.fulfilled, (state, action) =&gt; {
@@ -218,7 +215,7 @@ const registerSlice = createSlice({
     }
 });
 &nbsp;
-export const selectRegisterStatus = <span class="fstat-no" title="function not covered" >(s</span>tate) =&gt; <span class="cstat-no" title="statement not covered" >state.register.registerStatus;</span>
+export const selectRegisterStatus = (state) =&gt; state.register.registerStatus;
 export default registerSlice.reducer;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -226,7 +223,7 @@ export default registerSlice.reducer;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-07-19T15:40:39.522Z
+                at 2024-07-20T20:31:42.709Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -9,11 +9,10 @@ export const handlers = [
   }),
 
 
- http.post('https://localhost:4000/api/register', async ({request})=>{
+ http.post('https://cautious-orbit-xjq7wvv9q55hvvrj-4000.app.github.dev/api/register', async ({request})=>{
     const data = await request.json();
     const { firstName, lastName, userName, password} = data;
     if(!firstName || !lastName || !userName || !password){
-      const error = { message: 'missing body info' };
             return HttpResponse.error();
     }
    return HttpResponse.json(data)

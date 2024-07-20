@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { registerUser, selectRegisterStatus } from './registerSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import './Register.css';
 
 export default function Register() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const status = useSelector(selectRegisterStatus);
+    const status = useSelector(selectRegisterStatus) || null;
+
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -17,11 +19,6 @@ export default function Register() {
 
     const [errorText, setErrorText] = useState('');
 
-    const loader = () => {
-        if(!status){
-            return 'stagnant';
-        }
-    }
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setErrorText('');
@@ -52,9 +49,7 @@ export default function Register() {
                 }
             })
 
-        };
-
-        if (errorText === '' && !status) {
+        } else if (errorText === '' && !status) {
             dispatch(registerUser(formData));
             setFormData((prev) => {
                 return {
@@ -66,20 +61,19 @@ export default function Register() {
                     confirmPassword: ''
                 }
             });
-            navigate('/login');
-        }
-    }
-    useEffect(()=>{
-        console.log(status)
-        if(status && status === 'rejected'){
-            setErrorText('there was an issue contacting the server :/ Try again later.')
-          };
-        if(status && status === 'fulfilled'){
 
         }
+    }
+   
+    useEffect(() => {
+        if (status && status === 'rejected') {
+            setErrorText('there was an issue contacting the server :/ Try again later.')
+        };
+        if (status && status === 'fulfilled') {
+            navigate('/login');
+        }
     }, [status])
-  
-    
+
     return (
         <div>
             <h1>Register</h1>
@@ -103,7 +97,7 @@ export default function Register() {
                     <input type="submit" name="submit" role="submit"></input>
                 </label>
                 {errorText && <div role="register-error">ERROR: {errorText}</div>}
-                <div className={loader()}></div>
+                {status === 'pending' && <div className="loader"></div>}
             </form>
         </div>
     )
