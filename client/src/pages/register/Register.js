@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { registerUser, selectRegisterStatus } from './registerSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,19 +17,11 @@ export default function Register() {
 
     const [errorText, setErrorText] = useState('');
 
-    const loading = <div className="loader"></div>;
-    const fulfilled = () => navigate('/login');
-    let rejected;
     const loader = () => {
-        switch (status){
-            case 'pending' : return loading;
-           
-            case 'fulfilled' : return fulfilled;
-            
-            case 'rejected' : return rejected;
+        if(!status){
+            return 'stagnant';
         }
-    };
-   
+    }
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setErrorText('');
@@ -62,20 +54,8 @@ export default function Register() {
 
         };
 
-        if (errorText === '') {
-
-            try {
-                const res = await dispatch(registerUser(formData))
-                if (!res.ok) {
-                    throw new Error('There was an error connection to the server :/ Try again in a little bit.');
-                }
-
-                navigate({ to: '/login' });
-            } catch (err) {
-                setErrorText(err.message)
-                console.log(err);
-                return err;
-            };
+        if (errorText === '' && !status) {
+            dispatch(registerUser(formData));
             setFormData((prev) => {
                 return {
                     ...prev,
@@ -86,15 +66,20 @@ export default function Register() {
                     confirmPassword: ''
                 }
             });
-
-
-
-
-
+            navigate('/login');
         }
     }
+    useEffect(()=>{
+        console.log(status)
+        if(status && status === 'rejected'){
+            setErrorText('there was an issue contacting the server :/ Try again later.')
+          };
+        if(status && status === 'fulfilled'){
 
-
+        }
+    }, [status])
+  
+    
     return (
         <div>
             <h1>Register</h1>
@@ -117,9 +102,8 @@ export default function Register() {
                 <label htmlFor="submit">
                     <input type="submit" name="submit" role="submit"></input>
                 </label>
-                {loader()}
                 {errorText && <div role="register-error">ERROR: {errorText}</div>}
-
+                <div className={loader()}></div>
             </form>
         </div>
     )

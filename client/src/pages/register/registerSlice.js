@@ -18,13 +18,14 @@ export const registerUser = createAsyncThunk(
                     password
                 })
             });
-            
+            if(!res.ok){
+              return Error('missing body info')
+            }
             const data = await res.json();
             return data;
-
+        
         } catch (error) {
-            const err = new Error('missing body info');
-            return err;
+            throw new Error(error.message);
         }
     }
 )
