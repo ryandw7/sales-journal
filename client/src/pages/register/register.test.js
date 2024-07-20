@@ -1,12 +1,14 @@
 import Register from "./Register";
 import React from "react";
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { changeInputValue, renderWithProviders } from "../../../testUtils";
 import { useNavigate } from "react-router-dom";
 import reducer, { registerUser } from "./registerSlice";
+import { useDispatch } from "react-redux";
 import { setUpStore } from "../../app/store";
+import { server } from "../../mocks/server";
 
 
 describe('registerSlice', () => {
@@ -81,9 +83,10 @@ beforeEach(() => {
 
 describe('Register', () => {
 
-    test('Register submits new user upon successful entry', () => {
+    test('Register submits new user upon successful entry', async () => {
         changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'drowssap', /Confirm Password/i, 'drowssap');
-        userEvent.click(screen.getByRole("submit", { name: /submit/i })).then(() => {
+        await userEvent.click(screen.getByRole("submit", { name: /submit/i })).then(() => {
+            expect(screen.getByText('Successfully Registered!')).toBeInTheDocument()
             expect(useNavigate).toHaveBeenCalled();
         }
         )
@@ -109,7 +112,7 @@ describe('Register', () => {
     test('Register handles password mismatch', async () => {
 
         changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'password', /Confirm Password/i, 'password!');
-        
+
         await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
 
         const passwordInput = screen.getByLabelText(/Enter Password/i);
@@ -119,7 +122,7 @@ describe('Register', () => {
         expect(passwordInput.value).toBe('');
         expect(confirmPasswordInput.value).toBe('');
 
-        
+
 
         expect(err).toBeInTheDocument();
         expect(err.textContent).toBe('ERROR: Passwords do not match!');
@@ -134,5 +137,18 @@ describe('Register', () => {
         expect(err).toBeInTheDocument();
         expect(err.textContent).toBe('ERROR: No values should be empty!');
     });
+
+    test('Register handles server issues and sends an error message to user', async () => {
+        server.close()
+        changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'drowssap', /Confirm Password/i, 'drowssap');
+        await userEvent.click(screen.getByRole("submit", { name: /submit/i }))
+        await waitFor(() => {
+
+
+           
+            expect(screen.getByText('there was an issue contacting the server :/ Try again later.')).toBeInTheDocument()
+
+        })
+    })
 
 })

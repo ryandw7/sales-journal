@@ -51,17 +51,6 @@ export default function Register() {
 
         } else if (errorText === '' && !status) {
             dispatch(registerUser(formData));
-            setFormData((prev) => {
-                return {
-                    ...prev,
-                    firstName: '',
-                    lastName: '',
-                    userName: '',
-                    password: '',
-                    confirmPassword: ''
-                }
-            });
-
         }
     }
    
@@ -70,7 +59,7 @@ export default function Register() {
             setErrorText('there was an issue contacting the server :/ Try again later.')
         };
         if (status && status === 'fulfilled') {
-            navigate('/login');
+           setTimeout(()=>{navigate('/login')}, 3000) 
         }
     }, [status])
 
@@ -98,6 +87,7 @@ export default function Register() {
                 </label>
                 {errorText && <div role="register-error">ERROR: {errorText}</div>}
                 {status === 'pending' && <div className="loader"></div>}
+                {status === 'fulfilled' && <div>Successfully Registered!</div>}
             </form>
         </div>
     )
