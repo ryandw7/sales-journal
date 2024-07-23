@@ -12,13 +12,14 @@
 const { TextDecoder, TextEncoder, } = require('node:util')
 const { ReadableStream, TransformStream, markResourceTiming } = require('node:stream/web');
 const { clearImmediate } = require('node:timers')
+const { performance } = require("node:perf_hooks")
 Object.defineProperties(globalThis, {
   TextDecoder: { value: TextDecoder },
   TextEncoder: { value: TextEncoder },
   ReadableStream: { value: ReadableStream },
   TransformStream: { value: TransformStream },
   clearImmediate: { value: clearImmediate },
-  markResourceTiming: { value: markResourceTiming }
+  performance: { value: performance, writable: true }, 
 })
 
 const { Blob, File } = require('node:buffer')

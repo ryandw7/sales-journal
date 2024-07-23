@@ -143,12 +143,12 @@ describe('Register', () => {
         changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'drowssap', /Confirm Password/i, 'drowssap');
         await userEvent.click(screen.getByRole("submit", { name: /submit/i }))
         await waitFor(() => {
+            const err = screen.getByRole("register-error");
 
-
-           
-            expect(screen.getByText('there was an issue contacting the server :/ Try again later.')).toBeInTheDocument()
-
-        })
+            expect(err).toBeInTheDocument();
+            expect(err.textContent).toBe('ERROR: there was an issue contacting the server :/ Try again later.');
+    
+        },)
     })
 
 })
