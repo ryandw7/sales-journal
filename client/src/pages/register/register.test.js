@@ -5,8 +5,8 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { changeInputValue, renderWithProviders } from "../../../testUtils";
 import { useNavigate } from "react-router-dom";
-import reducer, { registerUser } from "./registerSlice";
-import { useDispatch } from "react-redux";
+import reducer, { registerUser, selectRegisterStatus } from "./registerSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { setUpStore } from "../../app/store";
 import { server } from "../../mocks/server";
 
@@ -82,11 +82,14 @@ beforeEach(() => {
 });
 
 describe('Register', () => {
+   
 
     test('Register submits new user upon successful entry', async () => {
+        
         changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'drowssap', /Confirm Password/i, 'drowssap');
         await userEvent.click(screen.getByRole("submit", { name: /submit/i })).then(() => {
-            expect(screen.getByText('Successfully Registered!')).toBeInTheDocument()
+            expect(screen.getByText('Successfully Registered!')).toBeInTheDocument();
+            expect(registerUser).toHaveBeenCalled();
             expect(useNavigate).toHaveBeenCalled();
         }
         )
@@ -121,33 +124,45 @@ describe('Register', () => {
 
         expect(passwordInput.value).toBe('');
         expect(confirmPasswordInput.value).toBe('');
-
-
-
         expect(err).toBeInTheDocument();
         expect(err.textContent).toBe('ERROR: Passwords do not match!');
     });
 
-    test('Register handles empty fields', async () => {
+    test('it handles passwords under 8 characters', async () => {
+
+        changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'pass', /Confirm Password/i, 'pass');
 
         await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
 
         const err = screen.getByRole("register-error");
 
         expect(err).toBeInTheDocument();
+        expect(err.textContent).toBe('ERROR: Password must be at least 8 characters!');
+
+    })
+    test('Register handles empty fields', async () => {
+
+        await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
+
+        const err = screen.getByRole("register-error");
+        console.log()
+        expect(err).toBeInTheDocument();
         expect(err.textContent).toBe('ERROR: No values should be empty!');
     });
 
     test('Register handles server issues and sends an error message to user', async () => {
+
         server.close()
         changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'drowssap', /Confirm Password/i, 'drowssap');
+
         await userEvent.click(screen.getByRole("submit", { name: /submit/i }))
         await waitFor(() => {
+
             const err = screen.getByRole("register-error");
 
             expect(err).toBeInTheDocument();
             expect(err.textContent).toBe('ERROR: there was an issue contacting the server :/ Try again later.');
-    
+
         },)
     })
 

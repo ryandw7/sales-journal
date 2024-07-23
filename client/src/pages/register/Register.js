@@ -49,17 +49,21 @@ export default function Register() {
                 }
             })
 
+
+
+        } else if (formData.password.length < 8) {
+            setErrorText('Password must be at least 8 characters!')
         } else if (errorText === '' && !status) {
             dispatch(registerUser(formData));
         }
     }
-   
+
     useEffect(() => {
         if (status && status === 'rejected') {
             setErrorText('there was an issue contacting the server :/ Try again later.')
         };
         if (status && status === 'fulfilled') {
-           setTimeout(()=>{navigate('/login')}, 3000) 
+            setTimeout(() => { navigate('/login') }, 3000)
         }
     }, [status])
 
