@@ -53,7 +53,13 @@ export default function Register() {
 
         } else if (formData.password.length < 8) {
             setErrorText('Password must be at least 8 characters!')
-        } else if (errorText === '' && !status) {
+        } else if (/[A-Z]/.test(formData.password) === false) {
+            setErrorText('Password must contain an uppercase letter.')
+        } else if (/[a-z]/.test(formData.password) === false) {
+            setErrorText('Password must contain a lowercase letter.')
+        } else if(/[a-z]/.test(formData.password) === false){
+            
+            }else if (errorText === '' && !status) {
             dispatch(registerUser(formData));
         }
     }

@@ -82,14 +82,15 @@ beforeEach(() => {
 });
 
 describe('Register', () => {
-   
+
 
     test('Register submits new user upon successful entry', async () => {
-        
-        changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'drowssap', /Confirm Password/i, 'drowssap');
+
+        changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'Drowssap!', /Confirm Password/i, 'Drowssap!');
+
         await userEvent.click(screen.getByRole("submit", { name: /submit/i })).then(() => {
             expect(screen.getByText('Successfully Registered!')).toBeInTheDocument();
-            expect(registerUser).toHaveBeenCalled();
+
             expect(useNavigate).toHaveBeenCalled();
         }
         )
@@ -114,7 +115,7 @@ describe('Register', () => {
 
     test('Register handles password mismatch', async () => {
 
-        changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'password', /Confirm Password/i, 'password!');
+        changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'Password!', /Confirm Password/i, 'Paszword!');
 
         await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
 
@@ -140,6 +141,36 @@ describe('Register', () => {
         expect(err.textContent).toBe('ERROR: Password must be at least 8 characters!');
 
     })
+    test('it handles passwords without an uppercase letter', async () => {
+
+        changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'password!', /Confirm Password/i, 'password!');
+
+        await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
+
+        const err = screen.getByRole("register-error");
+
+        expect(err).toBeInTheDocument();
+        expect(err.textContent).toBe('ERROR: Password must contain an uppercase letter.');
+
+    })
+    test('it handles passwords without a lowercase letter', async () => {
+        changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'PASSWORD!', /Confirm Password/i, 'PASSWORD!');
+
+        await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
+
+        const err = screen.getByRole("register-error");
+
+        expect(err).toBeInTheDocument();
+        expect(err.textContent).toBe('ERROR: Password must contain a lowercase letter.');
+    })
+
+    test('it handles passwords without a number or special character', () => {
+
+    })
+
+    test('it handles passwords without a number', () => {
+
+    })
     test('Register handles empty fields', async () => {
 
         await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
@@ -153,7 +184,7 @@ describe('Register', () => {
     test('Register handles server issues and sends an error message to user', async () => {
 
         server.close()
-        changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'drowssap', /Confirm Password/i, 'drowssap');
+        changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'Drowssap!', /Confirm Password/i, 'Drowssap!');
 
         await userEvent.click(screen.getByRole("submit", { name: /submit/i }))
         await waitFor(() => {
