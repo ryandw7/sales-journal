@@ -6,7 +6,7 @@ export const registerUser = createAsyncThunk(
         const { firstName, lastName, userName, password } = reqBody;
 
         try {
-            const res = await fetch('https://cautious-orbit-xjq7wvv9q55hvvrj-4000.app.github.dev/api/register', {
+            const res = await fetch('https://ubiquitous-train-6j7qg44r7jqc49w-4000.app.github.dev/api/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Make sure to set Content-Type

@@ -164,13 +164,17 @@ describe('Register', () => {
         expect(err.textContent).toBe('ERROR: Password must contain a lowercase letter.');
     })
 
-    test('it handles passwords without a number or special character', () => {
+    test('it handles passwords without a number or special character', async () => {
+        changeInputValue(/First Name/i, 'John', /Last Name/i, 'Doe', /Username/i, 'John.Doe23', /Enter Password/i, 'Password', /Confirm Password/i, 'Password');
 
+        await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
+
+        const err = screen.getByRole("register-error");
+
+        expect(err).toBeInTheDocument();
+        expect(err.textContent).toBe('ERROR: Password must contain at least one number or special character.');
     })
 
-    test('it handles passwords without a number', () => {
-
-    })
     test('Register handles empty fields', async () => {
 
         await userEvent.click(screen.getByRole("submit", { name: /submit/i }));
