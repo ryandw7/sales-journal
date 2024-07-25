@@ -4,16 +4,19 @@
   "main": "server.js",
   "scripts": {
     "serve": "node server.js",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
-  "description": "",
   "jest": {
-  "collectCoverage": true,
-  "coverageDirectory": "coverage",
-  "coverageReporters": ["html", "text"]
-},
+    "collectCoverage": true,
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "html",
+      "text"
+    ]
+  },
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
@@ -25,5 +28,6 @@
     "jest": "^29.7.0",
     "superagent": "^9.0.2",
     "supertest": "^7.0.0"
-  }
+  },
+  "description": ""
 }
