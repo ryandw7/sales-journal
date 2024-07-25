@@ -49,17 +49,27 @@ export default function Register() {
                 }
             })
 
+
+
+        } else if (formData.password.length < 8) {
+            setErrorText('Password must be at least 8 characters!')
+        } else if (/[A-Z]/.test(formData.password) === false) {
+            setErrorText('Password must contain an uppercase letter.')
+        } else if (/[a-z]/.test(formData.password) === false) {
+            setErrorText('Password must contain a lowercase letter.')
+        } else if (/[0-9\W_]/.test(formData.password) === false) {
+            setErrorText('Password must contain at least one number or special character.')
         } else if (errorText === '' && !status) {
             dispatch(registerUser(formData));
         }
     }
-   
+
     useEffect(() => {
         if (status && status === 'rejected') {
             setErrorText('there was an issue contacting the server :/ Try again later.')
         };
         if (status && status === 'fulfilled') {
-           setTimeout(()=>{navigate('/login')}, 3000) 
+            setTimeout(() => { navigate('/login') }, 3000)
         }
     }, [status])
 
