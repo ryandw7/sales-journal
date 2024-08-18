@@ -1,33 +1,33 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
+import { expressURL } from "../../environmentals";
 export const fetchCredentials = createAsyncThunk('login/fetchCredentials', async (reqBody) => {
     console.log('fetching');
     try {
-        setTimeout(()=>{
-            throw new Error('Request timed out :/')
-        }, 3000)
-        const { userName, password } = reqBody;
-        const res = await fetch('url', {
-            method: 'GET',
-            headers: {
 
+        const { username, password } = reqBody;
+        console.log(reqBody)
+        const res = await fetch(`${expressURL}/api/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-               userName,
-               password
+                username,
+                password
             })
         });
-        
+
         const data = await res.json();
         return data;
     } catch (err) {
+        console.log("error thrown in catch block")
         throw err
     }
 })
 const loginSlice = createSlice({
     name: 'login',
     initialState: {
-        loginStatus: '', 
+        loginStatus: '',
         user: {}
     },
     extraReducers: (builder) => {
@@ -45,4 +45,5 @@ const loginSlice = createSlice({
     }
 })
 
+export const selectLoginStatus = (state) => state.login.loginStatus
 export default loginSlice.reducer;

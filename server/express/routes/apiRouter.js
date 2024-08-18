@@ -4,18 +4,15 @@ const { registerUser } = require('../../db/dbUtils.js');
 const passport = require('../passport.js');
 
 apiRouter.post("/register", async (req, res, next) => {
-  const { firstName, lastName, userName, password } = await req.body;
+  const { firstName, lastName, userName, password } = req.body;
   if (!firstName || !lastName || !userName || !password) {
     const err = new Error('Missing value in request body');
     err.status = 400;
     return next(err);
   }
   console.log('request recieved successfully');
-
+    console.log(req.body)
     const response = await registerUser(firstName, lastName, userName, password);
-    console.log(res)
-
-  
     if (!response.ok) {
       const err = response.error;
       err.status = 400

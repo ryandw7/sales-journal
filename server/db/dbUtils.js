@@ -17,6 +17,7 @@ const db = {
             }
         },
         registerUser: async (firstName, lastName, userName, password) => {
+            //for registerUser to run their NEEDS to be at least one user 
             try {
                 console.log('register try block initiated...')
                 const unQuery = await client.query(`SELECT * FROM users WHERE un = '${userName}';`);
