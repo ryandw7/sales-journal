@@ -7,6 +7,7 @@ const errorMiddleware = require('./middleware/errorMiddleware');
 const passport = require('./passport.js');
 const session = require('express-session');
 const store = new session.MemoryStore();
+const CLIENT_URL = require("dotenv").config;
 
 api.use(
     session({
@@ -22,7 +23,7 @@ api.use(passport.initialize());
 api.use(passport.session());
 api.use(express.static('public'));
 api.use(cors({
-  origin: 'http://localhost:9000',
+  origin: CLIENT_URL,
   credentials: true
 }));
 api.use(bodyParser.json());

@@ -1,7 +1,9 @@
 const passport = require("passport");
 const bcrypt = require("bcrypt")
 const LocalStrategy = require("passport-local").Strategy;
-const {findByUsername, findById}  = require('../db/dbUtils.js')
+const {db} = require('../db/dbDeterminer.js')
+let {findByUsername, findById}  = db
+
 passport.serializeUser((user, cb) => {
   console.log("serializing...")
   cb(null, user.id);
