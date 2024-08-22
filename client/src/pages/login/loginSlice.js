@@ -8,6 +8,7 @@ export const fetchCredentials = createAsyncThunk('login/fetchCredentials', async
         console.log(reqBody)
         const res = await fetch(`${expressURL}/api/login`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -32,7 +33,7 @@ const loginSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchCredentials.rejected, (state, action) => {
+            .addCase(fetchCredentials.rejected, (state) => {
                 state.loginStatus = 'rejected';
             })
             .addCase(fetchCredentials.pending, (state) => {
@@ -45,5 +46,6 @@ const loginSlice = createSlice({
     }
 })
 
-export const selectLoginStatus = (state) => state.login.loginStatus
+export const selectLoginStatus = (state) => state.login.loginStatus;
+export const selectUser = (state) => state.login.user;
 export default loginSlice.reducer;

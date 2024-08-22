@@ -1,10 +1,12 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import registerSlice from "../pages/register/registerSlice";
-import loginSlice from "../pages/login/loginSlice"
+import loginSlice from "../pages/login/loginSlice";
+import dashboardSlice from "../pages/dashboard/dashboardSlice";
 const rootReducer = combineReducers(
     {
        register: registerSlice,
-       login: loginSlice
+       login: loginSlice,
+       dashboard: dashboardSlice
     }
 )
 export const setUpStore = ( preloadedState ) => {

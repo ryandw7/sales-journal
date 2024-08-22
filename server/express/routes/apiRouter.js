@@ -23,9 +23,13 @@ apiRouter.post("/register", async (req, res, next) => {
   
 });
 
-apiRouter.post('/login', passport.authenticate("local", { failureMessage: "Login attempt failed :/" }), (req, res) => {
+apiRouter.post('/login', passport.authenticate("local", {session: true, failureMessage: "Login attempt failed :/" }), (req, res) => {
   console.log("Login request recieved")
-  res.status(201).send("nice")
+  res.status(201).send(req.user)
 })
 
+apiRouter.get('/interactions', (req, res)=>{
+  
+  res.status(201).send(req)
+})
 module.exports = apiRouter;
