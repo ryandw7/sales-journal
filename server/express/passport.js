@@ -24,22 +24,7 @@ passport.use(new LocalStrategy((username, password, cb)=>{
     console.log("Authenticating user...")
    
     
-    findByUsername(username, async function (err, user) {
-      const matchedPassword = await bcrypt.compare(password, user.pw);
-        if (err) {
-          console.log(err)
-          return cb(err);
-        }
-        if (!user) {
-        console.log('!user')
-          return cb(null, false);
-        }
-        if (!matchedPassword) {
-          console.log(matchedPassword, password, user.pw)
-          return cb(null, false);
-        }
-        return cb(null, user);
-      })
+    
 }))
 
 

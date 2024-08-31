@@ -72,6 +72,11 @@ const db = {
                     return user.id;
                 }
             }
+        },
+  
+        fetchUserInteractions: async(id) => {
+            const data = client.query(`SELECT * FROM ${id};`);
+            return data;
         }
 
     }

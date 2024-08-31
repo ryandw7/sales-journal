@@ -1,10 +1,12 @@
-const express = require('express');
-const apiRouter = express.Router();
-require('dotenv').config()
-const {db} = require('../../db/dbDeterminer.js')
-const { registerUser } = db;
-const passport = require('../passport.js');
 
+const express = require('express');
+const {db} = require('../../db/dbDeterminer.js');
+require('dotenv').config();
+const { registerUser } = db;
+const apiRouter = express.Router();
+const authenticateToken = require('../middleware/authenticateToken.js')
+
+console.log(db())
 apiRouter.post("/register", async (req, res, next) => {
   const { firstName, lastName, userName, password } = req.body;
   if (!firstName || !lastName || !userName || !password) {
@@ -25,12 +27,30 @@ apiRouter.post("/register", async (req, res, next) => {
   
 });
 
-apiRouter.post('/login', passport.authenticate("local", {session: true, failureMessage: "Login attempt failed :/" }), (req, res) => {
+apiRouter.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  findByUsername(username, async function (err, user) {
+    const matchedPassword = await bcrypt.compare(password, user.pw);
+      if(err){
+        console.log(err);
+        return cb(null, false)
+      }
+      if (!user) {
+      console.log('!user')
+        return cb(null, false);
+      }
+      if (!matchedPassword) {
+        console.log(matchedPassword, password, user.pw)
+        return cb(null, false);
+      }
+      return cb(null, user);
+    })
   console.log("Login request recieved")
   res.status(201).send(req.user)
 })
 
-apiRouter.get('/interactions', (req, res)=>{
+apiRouter.get('/interactions', authenticateToken, (req, res)=>{
+  const user = req.user;
   
   res.status(201).send(req)
 })

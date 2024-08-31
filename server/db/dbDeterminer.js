@@ -1,8 +1,10 @@
 const { findByUsername, registerUser } = require("./dbUtils");
 const { findByUsernameMock, registerUserMock } = require("./dbTestUtils");
-require('dotenv').config()
+require('dotenv').config();
+console.log(process.env.DB_IS_ACTIVE)
 const dbDeterminer = () => {
- if(process.env.DB_IS_ACTIVE === false){
+   console.log(process.env.DB_IS_ACTIVE)
+ if(process.env.DB_IS_ACTIVE == "false"){
     return { findByUsernameMock, registerUserMock }
  }else{
     return { findByUsername, registerUser }
@@ -12,3 +14,5 @@ const dbDeterminer = () => {
 module.exports = {
     db: dbDeterminer
 }
+
+console.log(dbDeterminer())
