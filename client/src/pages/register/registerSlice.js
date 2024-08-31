@@ -8,8 +8,10 @@ export const registerUser = createAsyncThunk(
         try {
             const res = await fetch(`${expressURL}/api/register`, {
                 method: 'POST',
+                
                 headers: {
-                    'Content-Type': 'application/json', // Make sure to set Content-Type
+                    'Content-Type': 'application/json'
+                     // Make sure to set Content-Type
                 },
                 body: JSON.stringify({
                     firstName,

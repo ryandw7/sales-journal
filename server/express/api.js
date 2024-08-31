@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const errorMiddleware = require('./middleware/errorMiddleware');
 const passport = require('./passport.js');
 const session = require('express-session');
+const authRouter = require('./routes/authRouter.js');
 const store = new session.MemoryStore();
 
 api.use(

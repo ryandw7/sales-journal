@@ -2,7 +2,8 @@ const express = require('express');
 const apiRouter = express.Router();
 const { registerUser } = require('../../db/dbUtils.js');
 const passport = require('../passport.js');
-
+const authRouter = require('./authRouter.js');
+apiRouter.use('/auth', authRouter)
 apiRouter.post("/register", async (req, res, next) => {
   const { firstName, lastName, userName, password } = req.body;
   if (!firstName || !lastName || !userName || !password) {
@@ -29,7 +30,7 @@ apiRouter.post('/login', passport.authenticate("local", {session: true, failureM
 })
 
 apiRouter.get('/interactions', (req, res)=>{
-  
+  console.log(req.isAuthenticated)
   res.status(201).send(req)
 })
 module.exports = apiRouter;

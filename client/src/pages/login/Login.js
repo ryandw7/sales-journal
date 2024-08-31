@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { fetchCredentials, selectLoginStatus } from './loginSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { checkAuthStatus } from '../../authSlice';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -36,7 +37,10 @@ export default function Login() {
             setErrorText('there was an issue contacting the server :/ Try again later.')
         };
         if (status && status === 'fulfilled') {
-            setTimeout(() => { navigate('/dashboard') }, 3000)
+           setTimeout(() => { 
+            dispatch(checkAuthStatus());
+            //navigate('/dashboard');
+        }, 3000)
         }
     }, [status])
 
