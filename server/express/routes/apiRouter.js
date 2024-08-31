@@ -1,6 +1,8 @@
 const express = require('express');
 const apiRouter = express.Router();
-const { registerUser } = require('../../db/dbUtils.js');
+require('dotenv').config()
+const {db} = require('../../db/dbDeterminer.js')
+const { registerUser } = db;
 const passport = require('../passport.js');
 const authRouter = require('./authRouter.js');
 apiRouter.use('/auth', authRouter)
