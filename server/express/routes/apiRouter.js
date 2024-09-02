@@ -51,7 +51,6 @@ apiRouter.post('/login', (req, res) => {
 
 apiRouter.get('/interactions', authenticateToken, (req, res)=>{
   const user = req.user;
-  
   res.status(201).send(req)
 })
 module.exports = apiRouter;

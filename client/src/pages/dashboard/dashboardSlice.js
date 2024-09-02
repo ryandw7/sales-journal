@@ -6,6 +6,7 @@ export const fetchInteractions = createAsyncThunk('dashboard/fetchInteractions',
         const res = await fetch(`${expressURL}/api/interactions`, {
             method: 'GET',
             credentials: 'include',
+            mode: 'cross-origin',
             headers: {
             
                 'Content-Type': 'application/json',
