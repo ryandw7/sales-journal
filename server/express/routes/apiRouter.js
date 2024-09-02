@@ -1,12 +1,10 @@
 
 const express = require('express');
-const {db} = require('../../db/dbDeterminer.js');
+const { findByUsername, registerUser } = require('../../db/dbUtils.js')
 require('dotenv').config();
-const { registerUser } = db;
 const apiRouter = express.Router();
 const authenticateToken = require('../middleware/authenticateToken.js')
 
-console.log(db())
 apiRouter.post("/register", async (req, res, next) => {
   const { firstName, lastName, userName, password } = req.body;
   if (!firstName || !lastName || !userName || !password) {
@@ -15,41 +13,35 @@ apiRouter.post("/register", async (req, res, next) => {
     return next(err);
   }
   console.log('request recieved successfully');
-    console.log(req.body)
-    const response = await registerUser(firstName, lastName, userName, password);
-    if (!response.ok) {
-      const err = response.error;
-      err.status = 400
-      return next(err)
-    }
-    res.status(201).send(req.body)
+  console.log(req.body)
+  const response = await registerUser(firstName, lastName, userName, password);
+  if (!response.ok) {
+    const err = response.error;
+    err.status = 400
+    return next(err)
+  }
+  res.status(201).send(req.body)
 
-  
+
 });
 
-apiRouter.post('/login', (req, res) => {
+apiRouter.post('/login', async (req, res, next) => {
   const { username, password } = req.body;
-  findByUsername(username, async function (err, user) {
-    const matchedPassword = await bcrypt.compare(password, user.pw);
-      if(err){
-        console.log(err);
-        return cb(null, false)
-      }
-      if (!user) {
-      console.log('!user')
-        return cb(null, false);
-      }
-      if (!matchedPassword) {
-        console.log(matchedPassword, password, user.pw)
-        return cb(null, false);
-      }
-      return cb(null, user);
-    })
-  console.log("Login request recieved")
-  res.status(201).send(req.user)
+  console.log('Login request body:', req.body)
+
+  const search = await findByUsername(username);
+  if(!search.ok){
+    console.log('err')
+    return next(search.err)
+  }
+  console.log('should be good bruv')
+  const data = search.data;
+
+   res.status(201).send(data)
+  
 })
 
-apiRouter.get('/interactions', authenticateToken, (req, res)=>{
+apiRouter.get('/interactions', authenticateToken, (req, res) => {
   const user = req.user;
   res.status(201).send(req)
 })

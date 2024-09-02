@@ -3,17 +3,17 @@ const client = require("./pgClient.js");
 const bcrypt = require("bcrypt");
 const db = {
     users: {
-        findByUsername: async (userName, callback) => {
+        findByUsername: async (username) => {
             try {
-                const res = await client.query(`SELECT * FROM users WHERE un = '${userName}';`);
-                const data = await res.rows[0];
-                console.log(data)
+                const res = await client.query(`SELECT * FROM users WHERE un = '${username}';`);
+                const user = await res.rows[0];
+                console.log(user)
                 if (data != undefined) {
-                    return callback(null, data);
+                    return {ok: true, data: data}
                 }
-                throw new Error('No user with that userName');
+                throw new Error('No user with that Username');
             } catch (err) {
-                return callback(err, null)
+                return {ok: false, err}
             }
         },
         registerUser: async (firstName, lastName, userName, password) => {
