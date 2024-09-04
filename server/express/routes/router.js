@@ -89,6 +89,7 @@ if(!addInteraction.ok){
   err.status = 401
   return next(err)
 }
+console.log
 const data = addInteraction.data;
 res.status(201).send(data)
 })
@@ -100,7 +101,7 @@ router.get('/interactions', authenticateToken, (req, res) => {
   const interactions = getInteractions(id);
  
   res.status(201).send(interactions)
-
+ 
 })
 
 module.exports = router;

@@ -92,6 +92,7 @@ const db = {
                phoneNumber,
                interaction
             }
+            interactions[id].push(interactionObj)
             return {ok: true, data: interactionObj}
         }
     }
