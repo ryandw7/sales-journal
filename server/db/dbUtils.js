@@ -16,6 +16,12 @@ const db = {
                 return {ok: false, err}
             }
         },
+       
+        comparePasswords: async (encryptedPassword, password) => {
+           const res = await bcrypt.compare(password, encryptedPassword);
+           return res
+        },
+
         registerUser: async (firstName, lastName, userName, password) => {
             //for registerUser to run their NEEDS to be at least one user 
             try {
@@ -83,5 +89,6 @@ const db = {
 };
 module.exports = {
     findByUsername: db.users.findByUsername,
-    registerUser: db.users.registerUser
+    registerUser: db.users.registerUser,
+    comparePasswords: db.users.comparePasswords
 };

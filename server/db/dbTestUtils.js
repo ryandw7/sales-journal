@@ -1,6 +1,4 @@
-
-const bcrypt = require("bcrypt");
-console.log('mock be like')
+//MOCK USER DATA - userdata.rows.push(<user object to add>)
 const userData = {
     rows: [{
         id: 1,
@@ -16,28 +14,44 @@ const userData = {
         pw: 'Password!'
     }]
 }
+
+/*
+MOCK INTERACTION DATA
+
+create new table for user - interactions[<id>] = []
+
+insert new interaction for user - interactions[<id>].push
+
+ */
+const interactions = {1: [{pn: 9893299054, fn: 'cody', dt: 'today', in: 'Cx be doing the cx thang', id: 1}, {pn: 9893099004, fn: 'deez', dt: 'today', in: 'Cx be doing the cx thang', id: 2}]}
+
+//For files that require db, import db from db/dbDeterminer.js and destructure functions as variables
+
 const db = {
+//Utility functions for managing users
 
     users: {
+        //help! I've fallen and I don't know when a function requires async
         findByUsernameMock: (username) => {
             console.log('mock find started')
             const user = userData.rows.filter(item => item.un == username)
 
             try {
-
+                console.log(user[0])
                 if (user.length > 0) {
-                    return {ok: true, data: user};
+                    return {ok: true, data: user[0]};
                 }
                 throw new Error('No user with that userName');
             } catch (err) {
                 return {ok: false, err}
             }
         },
-        registerUserMock: async (firstName, lastName, userName, password) => {
+
+        registerUserMock: async (firstName, lastName, username, password) => {
             //for registerUser to run their NEEDS to be at least one user 
             try {
                 console.log('register try block initiated...')
-                const unQuery = userData.rows.filter(item => item.un === userName)
+                const unQuery = userData.rows.filter(item => item.un === username)
                 if (unQuery.length > 0) {
                     throw new Error('That userName is already taken.')
                 }
@@ -45,7 +59,8 @@ const db = {
 
 
                 const id = userData.rows.length + 1;
-                userData.rows.push({id: id, fn: firstName, ln: lastName, un: userName, pw: password})
+                userData.rows.push({id: id, fn: firstName, ln: lastName, un: username, pw: password})
+                interactions[id] = [];
                 return { ok: true }
             } catch (error) {
                 return { ok: false, error: error.message }
@@ -54,25 +69,37 @@ const db = {
 
 
         },
-        loginUserMock: async (userName, password) => {
-            const unSearch = userData.rows.filter(item => item.un === userName)
-            if (unSearch.length < 1) {
-                throw new Error('userName or password is incorrect.');
-            } else if (unSearch.rows.length > 0) {
-                let user = unSearch.rows[0];
-                if (user.pw != password) {
-                    console.log(user, password)
-                    throw new Error('userName or password is incorrect.')
-                } else if (user.pw === password) {
-                    console.log(user.id)
-                    return user;
-                }
+        //Currently no bcrpyt in password compare for mocks
+        comparePasswordsMock: (storedPassword, enteredPassword) => {
+         if(storedPassword === enteredPassword){
+            return true
+         }else{
+            return false
+         }
+        },
+        
+        getInteractionsMock: (id) => {
+         const userInteractions = interactions[id];
+         return userInteractions;
+        },
+        
+        addNewInteractionMock: (id, firstName, lastName, phoneNumber, interaction) => {
+            let intId = interactions[id].length + 1;
+            const interactionObj = {        
+               id: intId,
+               firstName,
+               lastName,
+               phoneNumber,
+               interaction
             }
+            return {ok: true, data: interactionObj}
         }
-
     }
 };
 module.exports = {
     findByUsernameMock: db.users.findByUsernameMock,
-    registerUserMock: db.users.registerUserMock
+    registerUserMock: db.users.registerUserMock,
+    comparePasswordsMock: db.users.comparePasswordsMock,
+    getInteractionsMock: db.users.getInteractionsMock,
+    addNewInteractionMock: db.users.addNewInteractionMock
 };

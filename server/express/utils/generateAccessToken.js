@@ -1,9 +1,12 @@
 require('dotenv').config;
-const db = require('../../db/dbUtils.js')
+
+const db = require('../../db/dbDeterminer.js');
+const { findByUsername } = db()
 const jwt = require("jsonwebtoken");
 function generateAccessToken(username) {
-    db.findByUsername(username)
-    return jwt.sign(username, `${process.env.TOKEN_SECRET}`);
+    const user = findByUsername(username);
+    const data = user.data;
+    return jwt.sign(data, `${process.env.TOKEN_SECRET}`);
   }
 
 module.exports = generateAccessToken;
