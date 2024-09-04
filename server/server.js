@@ -1,5 +1,4 @@
 // REQUIRED LIBRARIES:
-
 require("dotenv").config;
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -8,7 +7,7 @@ const bodyParser = require('body-parser');
 
 const errorMiddleware = require('./express/middleware/errorMiddleware');
 
-const apiRouter = require('./express/routes/apiRouter');
+const router = require('./express/routes/router');
 
 // SERVER VARIABLES
 
@@ -24,7 +23,7 @@ server.use(express.json());
 
 server.use(bodyParser.json());
 
-server.use('/api', apiRouter);
+server.use('/api', router);
 
 server.use(errorMiddleware);
 

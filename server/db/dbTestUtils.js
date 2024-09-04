@@ -1,6 +1,6 @@
 
 const bcrypt = require("bcrypt");
-
+console.log('mock be like')
 const userData = {
     rows: [{
         id: 1,
@@ -19,17 +19,18 @@ const userData = {
 const db = {
 
     users: {
-        findByUsernameMock: async (userName, callback) => {
-            const user = userData.rows.filter(item => item.un == userName)
+        findByUsernameMock: (username) => {
+            console.log('mock find started')
+            const user = userData.rows.filter(item => item.un == username)
 
             try {
 
                 if (user.length > 0) {
-                    return callback(null, data);
+                    return {ok: true, data: user};
                 }
                 throw new Error('No user with that userName');
             } catch (err) {
-                return callback(err, null)
+                return {ok: false, err}
             }
         },
         registerUserMock: async (firstName, lastName, userName, password) => {
