@@ -8,18 +8,32 @@ const db = {
                 const res = await client.query(`SELECT * FROM users WHERE un = '${username}';`);
                 const user = await res.rows[0];
                 console.log(user)
-                if (data != undefined) {
-                    return {ok: true, data: data}
+                if (user != undefined) {
+                    return { ok: true, data: user }
+                    /* 
+                    {
+                     ok: true,
+                     data: {
+                     id: <ID>,
+                     fn: <FIRST_NAME>,
+                     ln: <LAST_NAME>,
+                     un: <USER_NAME>,
+                     pw: <PASS_WORD>
+                      }
+                    }
+                    */
                 }
                 throw new Error('No user with that Username');
             } catch (err) {
-                return {ok: false, err}
+                return err
             }
         },
-       
+
         comparePasswords: async (encryptedPassword, password) => {
-           const res = await bcrypt.compare(password, encryptedPassword);
-           return res
+            console.log('comparing passwordsssssss')
+            const res = await bcrypt.compare(password, encryptedPassword);
+            console.log('PW COMPARE: ' + res)
+            return res;
         },
 
         registerUser: async (firstName, lastName, userName, password) => {
@@ -55,7 +69,7 @@ const db = {
                 const salt = await bcrypt.genSalt(10);
                 const hashedPassword = await bcrypt.hash(password, salt)
                 await client.query(`INSERT INTO users (id, fn, ln, un, pw) VALUES(${id}, '${firstName}', '${lastName}', '${userName}', '${hashedPassword}');`);
-                await client.query(`CREATE TABLE _${id} (fName TEXT, lName TEXT, pNumber INTEGER, date TEXT, interaction TEXT);`);
+                await client.query(`CREATE TABLE _${id} (fn TEXT, ln TEXT, pn INTEGER, date TEXT, interaction TEXT);`);
                 return { ok: true }
             } catch (error) {
                 return { ok: false, error: error.message }
@@ -64,31 +78,23 @@ const db = {
 
 
         },
-        loginUser: async (userName, password) => {
-            const unSearch = await client.query(`SELECT * FROM users WHERE un = '${userName}';`);
-            if (unSearch.rows.length < 1) {
-                throw new Error('userName or password is incorrect.');
-            } else if (unSearch.rows.length > 0) {
-                let user = unSearch.rows[0];
-                if (user.pw != password) {
-                    console.log(user, password)
-                    throw new Error('userName or password is incorrect.')
-                } else if (user.pw === password) {
-                    console.log(user.id)
-                    return user.id;
-                }
-            }
+        getInteractions: async (id) => {
+            const userInteractions = await client.query(`SELECT * FROM _${id};`)
+            return userInteractions.rows;
         },
-  
-        fetchUserInteractions: async(id) => {
-            const data = client.query(`SELECT * FROM ${id};`);
-            return data;
-        }
 
+        addNewInteraction: async (id, firstName, lastName, phoneNumber, interaction) => {
+          
+            const res = await client.query(`INSERT INTO _${id} (fn, ln, pn, date, interaction) VALUES ('${firstName}', '${lastName}', ${phoneNumber}, CURRENT_TIMESTAMP, '${interaction}');`)
+            console.log(res)
+            return { ok: true }
+        }
     }
 };
 module.exports = {
     findByUsername: db.users.findByUsername,
     registerUser: db.users.registerUser,
-    comparePasswords: db.users.comparePasswords
+    comparePasswords: db.users.comparePasswords,
+    getInteractions: db.users.getInteractions,
+    addNewInteraction: db.users.addNewInteraction
 };

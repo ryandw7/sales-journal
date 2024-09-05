@@ -1,5 +1,5 @@
 //REQUIRE BOTH MOCK AND REAL DB MODULES
-const { findByUsername, registerUser, comparePasswords } = require("./dbUtils");
+const { findByUsername, registerUser, comparePasswords, getInteractions, addNewInteraction } = require("./dbUtils");
 const { findByUsernameMock, registerUserMock, comparePasswordsMock, getInteractionsMock, addNewInteractionMock } = require("./dbTestUtils");
 require('dotenv').config();
 
@@ -13,7 +13,7 @@ const dbDeterminer = () => {
 
     return { findByUsername: findByUsernameMock, registerUser: registerUserMock, comparePasswords: comparePasswordsMock, getInteractions: getInteractionsMock, addNewInteraction: addNewInteractionMock };
  }else{
-    return { findByUsername, registerUser, comparePasswords }
+    return { findByUsername, registerUser, comparePasswords, getInteractions, addNewInteraction }
  }
 
 }

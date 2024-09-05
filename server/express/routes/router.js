@@ -57,51 +57,50 @@ router.post('/login', async (req, res, next) => {
   const search = await findByUsername(username);
 
   if (!search.ok) {
-
     const err = new Error('search aint searchin');
-    err.status(500)
+    err.status = 500;
     return next(err)
 
   }
 
   const user = await search.data;
-
+  console.log(user)
   const encryptedPassword = user.pw;
 
   const passwordAuth = await comparePasswords(encryptedPassword, password);
   console.log(encryptedPassword, password)
-  console.log(passwordAuth)
+  console.log('pw auth', passwordAuth)
   let token;
-  if (passwordAuth) {
-    token = generateAccessToken(username)
+  if (passwordAuth === true) {
+    token = generateAccessToken(user)
   }
   res.status(201).send(token)
 })
 
 
 //POST - ADD NEW INTERACTION
-router.post('/interactions/:id', authenticateToken, async (req, res, next)=>{
-const { id } = req.params;
-const { firstName, lastName, phoneNumber, interaction } = req.body;
-const addInteraction = await addNewInteraction(id, firstName, lastName, phoneNumber, interaction);
-if(!addInteraction.ok){
-  const err = new Error('couldnt add :/')
-  err.status = 401
-  return next(err)
-}
-console.log
-const data = addInteraction.data;
-res.status(201).send(data)
+router.post('/interactions/:id', authenticateToken, async (req, res, next) => {
+  const { id } = req.params;
+  const { firstName, lastName, phoneNumber, interaction } = req.body;
+  const addInteraction = await addNewInteraction(id, firstName, lastName, phoneNumber, interaction);
+  if (!addInteraction.ok) {
+    const err = new Error('couldnt add :/')
+    err.status = 401
+    return next(err)
+  }
+
+  const data = addInteraction.data;
+  res.status(201).send(data)
 })
 //GET - RETURN LIST OF USER INTERACTIONS BY ID IF PROPERLY AUTHENTICATED
 
-router.get('/interactions', authenticateToken, (req, res) => {
- console.log('GET - interactions initiated')
+router.get('/interactions', authenticateToken, async (req, res) => {
+  console.log('GET - interactions initiated')
   const id = req.user.id;
-  const interactions = getInteractions(id);
- 
+  const interactions = await getInteractions(id);
+
   res.status(201).send(interactions)
- 
+
 })
 
 module.exports = router;

@@ -35,11 +35,12 @@ const db = {
         findByUsernameMock: (username) => {
             console.log('mock find started')
             const user = userData.rows.filter(item => item.un == username)
-
+            //returns: {id: <ID>, fn: <FIRST_NAME>, ln: <LAST_NAME>, un: <USERNAME>, pw: <PASSWORD>}
             try {
                 console.log(user[0])
                 if (user.length > 0) {
                     return {ok: true, data: user[0]};
+                    //returns: {ok: true, data: {id: <ID>, fn: <FIRST_NAME>, ln: <LAST_NAME>, un: <USERNAME>, pw: <PASSWORD>}}
                 }
                 throw new Error('No user with that userName');
             } catch (err) {
@@ -80,7 +81,7 @@ const db = {
         
         getInteractionsMock: (id) => {
          const userInteractions = interactions[id];
-         return userInteractions;
+         return userInteractions.rows;
         },
         
         addNewInteractionMock: (id, firstName, lastName, phoneNumber, interaction) => {
