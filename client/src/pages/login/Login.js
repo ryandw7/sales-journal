@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { fetchCredentials, selectLoginStatus } from './loginSlice';
+import { fetchCredentials, selectLoginStatus } from '../../redux/loginSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 

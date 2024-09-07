@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { fetchInteractions, selectInteractionsStatus, selectInteractions, addInteraction } from './dashboardSlice.js';
+import { fetchInteractions, selectInteractionsStatus, selectInteractions, addInteraction } from '../../redux/dashboardSlice.js';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../login/loginSlice.js';
+import { selectUser } from '../../redux/loginSlice.js';
 import Interactions from '../../features/Interactions.js';
 import NewInteraction from '../../components/NewInteraction.js';
 

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { EXPRESS_URL } from "../../globals";
+import { EXPRESS_URL } from "../globals";
 export const fetchCredentials = createAsyncThunk('login/fetchCredentials', async (reqBody) => {
     console.log('fetching');
     try {

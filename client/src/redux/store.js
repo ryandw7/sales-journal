@@ -1,7 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import registerSlice from "../pages/register/registerSlice";
-import loginSlice from "../pages/login/loginSlice";
-import dashboardSlice from "../pages/dashboard/dashboardSlice";
+import registerSlice from "./registerSlice";
+import loginSlice from "./loginSlice";
+import dashboardSlice from "./dashboardSlice";
 
 
 const rootReducer = combineReducers(

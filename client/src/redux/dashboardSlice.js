@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { EXPRESS_URL } from "../../globals";
+import { EXPRESS_URL } from "../globals";
 
 export const fetchInteractions = createAsyncThunk('dashboard/fetchInteractions', async (token) => {
     try {

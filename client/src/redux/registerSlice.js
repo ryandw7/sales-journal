@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
-import { EXPRESS_URL } from "../../globals";
+import { EXPRESS_URL } from "../globals";
 
 export const registerUser = createAsyncThunk(
     'register/registerUser',

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { addInteraction } from '../pages/dashboard/dashBoardSlice';
+import { addInteraction } from '../redux/dashboardSlice';
 export default function NewInteraction() {
    
     const [newIntObj, setNewIntObj] = useState({

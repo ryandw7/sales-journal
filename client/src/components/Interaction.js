@@ -1,8 +1,8 @@
 import React from 'react';
 
-export default function Interaction({interaction}) {
+export default function Interaction({ interaction }) {
     const { fn, ln, pn, date, note, id } = interaction;
-    
+
     return (
         <li key={`${date}`}>
             <h3>{fn}{ln}</h3>

@@ -4,7 +4,7 @@ import React from 'react';
 import App from './app/App.js';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { setUpStore } from './app/store';
+import { setUpStore } from './redux/store';
 
 const preloadedState = {}
 const store = setUpStore(preloadedState);

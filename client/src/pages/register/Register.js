@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { registerUser, selectRegisterStatus } from './registerSlice';
+import { registerUser, selectRegisterStatus } from '../../redux/registerSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import './Register.css';
 

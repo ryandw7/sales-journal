@@ -1,7 +1,7 @@
 import React from 'react';
 import Interaction from "../components/Interaction.js";
 import { useSelector } from 'react-redux';
-import { selectInteractions } from '../pages/dashboard/dashboardSlice';
+import { selectInteractions } from '../redux/dashboardSlice.js';
 
 export default function Interactions() {
     const interactionsArr = useSelector(selectInteractions);
