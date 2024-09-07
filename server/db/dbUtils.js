@@ -69,7 +69,7 @@ const db = {
                 const salt = await bcrypt.genSalt(10);
                 const hashedPassword = await bcrypt.hash(password, salt)
                 await client.query(`INSERT INTO users (id, fn, ln, un, pw) VALUES(${id}, '${firstName}', '${lastName}', '${userName}', '${hashedPassword}');`);
-                await client.query(`CREATE TABLE _${id} (fn TEXT, ln TEXT, pn INTEGER, date TEXT, interaction TEXT);`);
+                await client.query(`CREATE TABLE _${id} (fn TEXT, ln TEXT, pn INTEGER, date TEXT, interaction TEXT, id SERIAL UNIQUE);`);
                 return { ok: true }
             } catch (error) {
                 return { ok: false, error: error.message }
@@ -83,9 +83,8 @@ const db = {
             return userInteractions.rows;
         },
 
-        addNewInteraction: async (id, firstName, lastName, phoneNumber, interaction) => {
-          
-            const res = await client.query(`INSERT INTO _${id} (fn, ln, pn, date, interaction) VALUES ('${firstName}', '${lastName}', ${phoneNumber}, CURRENT_TIMESTAMP, '${interaction}');`)
+        addNewInteraction: async (id, firstName, lastName, phoneNumber, note) => {
+            const res = await client.query(`INSERT INTO _${id} (fn, ln, pn, date, note) VALUES ('${firstName}', '${lastName}', ${phoneNumber}, CURRENT_TIMESTAMP, '${note}');`)
             console.log(res)
             return { ok: true }
         }

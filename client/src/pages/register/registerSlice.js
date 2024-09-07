@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
-import { expressURL } from "../../environmentals";
+import { EXPRESS_URL } from "../../globals";
+
 export const registerUser = createAsyncThunk(
     'register/registerUser',
     async (reqBody) => {
         const { firstName, lastName, userName, password } = reqBody;
 
         try {
-            const res = await fetch(`${expressURL}/api/register`, {
+            const res = await fetch(`${EXPRESS_URL}/register`, {
                 method: 'POST',
                 
                 headers: {

@@ -2,7 +2,7 @@
 require("dotenv").config;
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const cors = require('cors');
 // REQUIRED MODULES
 
 const errorMiddleware = require('./express/middleware/errorMiddleware');
@@ -19,6 +19,7 @@ const PORT = process.env.SERVER_PORT || 4000;
 
 server.use(express.static('public'));
 
+server.use(cors())
 server.use(express.json());
 
 server.use(bodyParser.json());
@@ -32,3 +33,5 @@ server.use(errorMiddleware);
 server.listen(PORT, () => {
     console.log('Express server is listening on port: ' + PORT)
   });
+
+  

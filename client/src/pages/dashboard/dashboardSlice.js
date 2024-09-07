@@ -1,20 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { expressURL } from "../../environmentals";
-  
-export const fetchInteractions = createAsyncThunk('dashboard/fetchInteractions', async () => {
+import { EXPRESS_URL } from "../../globals";
+
+export const fetchInteractions = createAsyncThunk('dashboard/fetchInteractions', async (token) => {
     try {
-        const res = await fetch(`${expressURL}/api/interactions`, {
+        console.log(token)
+        const res = await fetch(`${EXPRESS_URL}/interactions`, {
             method: 'GET',
-            credentials: 'include',
-            mode: 'cross-origin',
+            mode: 'cors',
             headers: {
-            
-                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
             }
         });
-        if (!res.ok) {
-            throw new Error('bruh')
-        }
         const data = await res.json();
         return data;
     } catch (err) {
@@ -22,6 +19,24 @@ export const fetchInteractions = createAsyncThunk('dashboard/fetchInteractions',
     }
 });
 
+export const addInteraction = createAsyncThunk('dashboard/addInteraction', async (token, newIntObj) => {
+    try {
+        const res = await fetch(`${EXPRESS_URL}/interactions`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newIntObj)
+        });
+        if(!res.ok){
+            throw new Error('There was an issue...')
+        }
+    } catch (err) {
+          throw err
+    }
+})
 
 const dashboardSlice = createSlice({
     name: 'dashboard',
@@ -30,17 +45,17 @@ const dashboardSlice = createSlice({
         interactions: []
     },
     extraReducers: (builder) => {
-     builder
-     .addCase(fetchInteractions.pending, (state)=>{
-        state.interactionsStatus = 'pending';
-     })
-     .addCase(fetchInteractions.rejected, (state)=>{
-        state.interactionsStatus = 'rejected';
-     })
-     .addCase(fetchInteractions.fulfilled, (state, action)=>{
-        state.interactionsStatus = 'fulfilled';
-        state.interactions = action.payload;
-     })
+        builder
+            .addCase(fetchInteractions.pending, (state) => {
+                state.interactionsStatus = 'pending';
+            })
+            .addCase(fetchInteractions.rejected, (state) => {
+                state.interactionsStatus = 'rejected';
+            })
+            .addCase(fetchInteractions.fulfilled, (state, action) => {
+                state.interactionsStatus = 'fulfilled';
+                state.interactions = action.payload;
+            })
     }
 })
 

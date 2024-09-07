@@ -1,15 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { expressURL } from "../../environmentals";
+import { EXPRESS_URL } from "../../globals";
 export const fetchCredentials = createAsyncThunk('login/fetchCredentials', async (reqBody) => {
     console.log('fetching');
     try {
 
         const { username, password } = reqBody;
         console.log(reqBody)
-        const res = await fetch(`${expressURL}/api/login`, {
+        const res = await fetch(`${EXPRESS_URL}/login`, {
             method: 'POST',
-            credentials: 'include',
+            mode: "cors",
             headers: {
+                
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({

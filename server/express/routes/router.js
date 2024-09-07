@@ -70,19 +70,21 @@ router.post('/login', async (req, res, next) => {
   const passwordAuth = await comparePasswords(encryptedPassword, password);
   console.log(encryptedPassword, password)
   console.log('pw auth', passwordAuth)
-  let token;
   if (passwordAuth === true) {
-    token = generateAccessToken(user)
+    const id = user.id;
+    const firstName = user.fn;
+    const lastName = user.ln;
+    const token = generateAccessToken(user);
+    res.status(201).send( {username, firstName, lastName, id, token})
   }
-  res.status(201).send(token)
+  
 })
 
 
 //POST - ADD NEW INTERACTION
-router.post('/interactions/:id', authenticateToken, async (req, res, next) => {
-  const { id } = req.params;
-  const { firstName, lastName, phoneNumber, interaction } = req.body;
-  const addInteraction = await addNewInteraction(id, firstName, lastName, phoneNumber, interaction);
+router.post('/interactions', authenticateToken, async (req, res, next) => {
+  const { firstName, lastName, phoneNumber, note, id } = req.body;
+  const addInteraction = await addNewInteraction(id, firstName, lastName, phoneNumber, note);
   if (!addInteraction.ok) {
     const err = new Error('couldnt add :/')
     err.status = 401
@@ -96,6 +98,7 @@ router.post('/interactions/:id', authenticateToken, async (req, res, next) => {
 
 router.get('/interactions', authenticateToken, async (req, res) => {
   console.log('GET - interactions initiated')
+  console.log(req)
   const id = req.user.id;
   const interactions = await getInteractions(id);
 
